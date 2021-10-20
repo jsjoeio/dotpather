@@ -14,20 +14,24 @@ function dotpath(str: string) {
 
   return function parse<KeyValueType>(obj: {
     [key: string]: KeyValueType;
-  }): any {
+  }): KeyValueType | undefined {
+    if (!obj) return undefined;
     // Could be a key in an object
     // or an index in an array
     let testKey: string | number;
+    let result: KeyValueType | undefined = undefined;
 
     for (let i = 0; i < len; ++i) {
       testKey = parts[i];
 
-      if (!obj) return undefined;
-
-      obj = obj[testKey];
+      // @ts-ignore
+      // TODO@jsjoeio fix me
+      // we should not be m/utating the original object
+      // also fix broken tests
+      result = obj[testKey];
     }
 
-    return obj;
+    return result;
   };
 }
 
