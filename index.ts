@@ -1,3 +1,8 @@
+type KeyValueObjectOrType<KeyValueType> =
+  | {
+      [key: string]: KeyValueType;
+    }
+  | KeyValueType;
 /**
  *
  * @param str path to value you want to lookup
@@ -12,26 +17,20 @@ function dotpath(str: string) {
   const parts = str.split(".");
   const len = parts.length;
 
-  return function parse<KeyValueType>(obj: {
-    [key: string]: KeyValueType;
-  }): KeyValueType | undefined {
-    if (!obj) return undefined;
+  return function parse(obj: any): any {
     // Could be a key in an object
     // or an index in an array
     let testKey: string | number;
-    let result: KeyValueType | undefined = undefined;
 
-    for (let i = 0; i < len; ++i) {
+    for (var i = 0; i < len; ++i) {
       testKey = parts[i];
 
-      // @ts-ignore
-      // TODO@jsjoeio fix me
-      // we should not be m/utating the original object
-      // also fix broken tests
-      result = obj[testKey];
+      if (!obj) return;
+
+      obj = obj[testKey];
     }
 
-    return result;
+    return obj;
   };
 }
 

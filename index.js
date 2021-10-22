@@ -14,20 +14,16 @@ function dotpath(str) {
     var parts = str.split(".");
     var len = parts.length;
     return function parse(obj) {
-        if (!obj)
-            return undefined;
         // Could be a key in an object
         // or an index in an array
         var testKey;
-        var result = undefined;
         for (var i = 0; i < len; ++i) {
             testKey = parts[i];
-            // @ts-ignore
-            // TODO@jsjoeio fix me
-            // we should not be mutating the original object
-            result = obj[testKey];
+            if (!obj)
+                return;
+            obj = obj[testKey];
         }
-        return result;
+        return obj;
     };
 }
 exports.default = dotpath;
